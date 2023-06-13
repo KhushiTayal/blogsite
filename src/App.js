@@ -49,7 +49,7 @@ const App = () => {
   return (
     <div className="wrapper">
       <div className="content">
-    <Router>
+      <BrowserRouter basename="/blogsite">
       <Navbar />
       <Switch>
         <Route exact path="/">
@@ -67,7 +67,7 @@ const App = () => {
         </Route>
       </Switch>
       {/* <Footer /> */}
-    </Router>
+      </BrowserRouter>
     </div>
     </div>
   );
