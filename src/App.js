@@ -1,25 +1,76 @@
-import logo from './logo.svg';
+import React, { useState } from 'react';
+import { BrowserRouter as Router, Route, Switch, Link } from 'react-router-dom';
+import Topics from './Topics';
+import AddTopicForm from './AddTopicForm';
+import Editor from './Editor';
+import Navbar from './Navbar';
+import Footer from './Footer';
 import './App.css';
+import { BrowserRouter } from 'react-router-dom/cjs/react-router-dom.min';
 
-function App() {
+const App = () => {
+  const [topics, setTopics] = useState({
+    Technology: [
+      {
+        name: 'Artificial Intelligence',
+        keywords: ['AI', 'Machine Learning', 'Deep Learning'],
+      },
+      {
+        name: 'Blockchain',
+        keywords: ['Bitcoin', 'Cryptocurrency', 'Smart Contracts'],
+      },
+    ],
+    Science: [
+      {
+        name: 'Quantum Mechanics',
+        keywords: ['Quantum Entanglement', 'Superposition', 'Quantum Computing'],
+      },
+    ],
+  });
+
+  const addTopic = (category, topicName, keywords) => {
+    // Logic to add a new topic
+    const newTopic = { name: topicName, keywords };
+    setTopics((prevTopics) => ({
+      ...prevTopics,
+      [category]: [...(prevTopics[category] || []), newTopic],
+    }));
+  };
+
+  const deleteTopic = (category, index) => {
+    // Logic to delete a topic
+    setTopics((prevTopics) => {
+      const updatedTopics = { ...prevTopics };
+      updatedTopics[category].splice(index, 1);
+      return updatedTopics;
+    });
+  };
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className="wrapper">
+      <div className="content">
+    <Router>
+      <Navbar />
+      <Switch>
+        <Route exact path="/">
+          <Topics topics={topics} deleteTopic={deleteTopic} />
+          {/* <AddTopicForm addTopic={addTopic} /> */}
+        </Route>
+        <Route exact path="/addTopic">
+          <AddTopicForm addTopic={addTopic} />
+        </Route>
+        <Route exact path="/editor">
+          <Editor />
+        </Route>
+        <Route exact path="/editor/:topicName">
+          <Editor />
+        </Route>
+      </Switch>
+      {/* <Footer /> */}
+    </Router>
+    </div>
     </div>
   );
-}
+};
 
 export default App;
