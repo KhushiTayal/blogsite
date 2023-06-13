@@ -12,17 +12,41 @@ const Editor = () => {
     const contentState = editorState.getCurrentContent();
     const rawContent = convertToRaw(contentState);
 
+    let generatedText = '';
     let generatedContent = '';
 
     if (tone === 'Formal') {
-      generatedContent = `Dear readers,\n\n${rawContent}\n\nSincerely,\n[Your Name]`;
+      generatedText = `Dear readers,\n\n${rawContent}\n\nSincerely,\n[Your Name]`;
     } else if (tone === 'Informal') {
-      generatedContent = `Hey everyone!\n\n${rawContent}\n\nTake care,\n[Your Name]`;
+      generatedText = `Hey everyone!\n\n${rawContent}\n\nTake care,\n[Your Name]`;
     } else if (tone === 'Casual') {
-      generatedContent = `Hey there!\n\n${rawContent}\n\nCheers,\n[Your Name]`;
+      generatedText = `Hey there!\n\n${rawContent}\n\nCheers,\n[Your Name]`;
     }
 
-    console.log('Generated Content:', rawContent, 'Tone:', tone, generatedContent);
+    generatedContent = `Generated Content:\n\n${generatedText}\n\nTone: ${tone}`;
+
+    const newContentState = convertFromRaw({
+      entityMap: {},
+      blocks: [
+        {
+          key: 'generatedContent',
+          text: generatedContent,
+          type: 'unstyled',
+          depth: 0,
+          inlineStyleRanges: [],
+          entityRanges: [],
+          data: {},
+        },
+      ],
+    });
+
+    const newEditorState = EditorState.createWithContent(newContentState);
+    setEditorState(newEditorState);
+  };
+
+  const handleRefresh = () => {
+    setEditorState(EditorState.createEmpty());
+    setTone('');
   };
 
   const handleKeyCommand = (command) => {
@@ -35,9 +59,6 @@ const Editor = () => {
   };
 
   const handleImageUpload = (file) => {
-    // Logic for uploading images
-    // You can implement your preferred method for uploading images here
-    // For the sake of this example, we are returning a promise that resolves with a fake image URL
     return new Promise((resolve, reject) => {
       resolve({ data: { link: 'https://example.com/image.jpg' } });
     });
@@ -77,6 +98,12 @@ const Editor = () => {
           className="px-4 py-2 text-white bg-blue-500 rounded hover:bg-blue-600"
         >
           Generate
+        </button>
+        <button
+          onClick={handleRefresh}
+          className="px-4 py-2 text-white bg-red-500 rounded hover:bg-red-600"
+        >
+          Refresh
         </button>
       </div>
       <div className="flex space-x-4 mb-4">

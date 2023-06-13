@@ -7,7 +7,7 @@ const Navbar = () => {
         <div className="flex items-center justify-between h-16">
           <div className="flex items-center">
             <div className="flex-shrink-0">
-              <h1 className="text-white font-bold">My Website</h1>
+              <h1 className="text-white font-bold ml-2 text-xl">My Website</h1> 
             </div>
           </div>
           <div className="flex items-center">
